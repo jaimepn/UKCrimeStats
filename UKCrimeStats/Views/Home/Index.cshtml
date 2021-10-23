@@ -1,0 +1,91 @@
+﻿
+@model UKCrimeStats.ViewModels.AllCrimesViewModel
+
+@using (Html.BeginForm("Search", "Home"))
+{
+
+    @Html.ValidationSummary(true, "Please fix the following errors.")
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Latitude)
+        @Html.TextBoxFor(m => m.Latitude, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Latitude)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Longitude)
+        @Html.TextBoxFor(m => m.Longitude, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Longitude)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedMonth)
+        @Html.DropDownListFor(m => m.SelectedMonth,
+                            new SelectList(Model.Months),
+                            "Select a Month", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.SelectedMonth)
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+}
+
+@if (Model.result != null && Model.result.TotalCount > 0)
+{
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group">
+            <table class="table table-responsive" style="width:400px">
+                <tr>
+                    <td>
+                        <b>Category</b>
+                    </td>
+                    <td>
+                        <b>Frequency</b>
+                    </td>
+                </tr>
+                @foreach (var item in Model.result.CrimeStats)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Count)
+                        </td>
+                    </tr>
+                }
+            </table>
+            <hr />
+            <b>Number of reports found: @Model.result.TotalCount</b>
+        </div>
+    </div>
+}
+@if (Model.result != null && Model.result.TotalCount == 0)
+{
+    <hr />
+    <b>No reports found!</b>
+}
+
+<style>
+    .form-group {
+        display: block;
+        margin-block-start: 0.3em;
+        margin-block-end: 0.3em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+    }
+    label {
+        display: inline-block;
+        width: 120px;
+        text-align: right;
+    }
+    input {
+        width: 250px;
+        box-sizing: border-box;
+        border: 1px solid #999;
+    }
+    button {
+        margin: 20px 0 20px 124px;
+    }
+</style>
+
